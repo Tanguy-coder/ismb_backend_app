@@ -3,7 +3,9 @@ package com.tanguydev.ismb.Infrastructure.Models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "annee_scolaires")
@@ -15,9 +17,14 @@ public class AnneeScolaire extends AbstractModel{
     @Column(unique = true,nullable = false)
     private String code;
     @Column(nullable = false)
-    private Date date_debut;
+    private LocalDate dateDebut;
     @Column(nullable = false)
-    private Date date_fin;
+    private LocalDate dateFin;
     private Boolean is_active;
 
+    @OneToMany(mappedBy = "anneeScolaire")
+    private Set<Note> notes;
+
+    @OneToMany(mappedBy = "anneeScolaire")
+    private Set<ParcourtEtudiant> parcours;
 }

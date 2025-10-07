@@ -28,8 +28,8 @@ public class User extends AbstractModel{
     private String contact;
     @Column(unique = true, nullable = false)
     private String username;
-    @Column(nullable = false)
-    private boolean is_active;
+    @Column(nullable = false, name = "is_active")
+    private boolean active;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
@@ -40,7 +40,4 @@ public class User extends AbstractModel{
     @OneToMany(mappedBy = "user")
     private Set<Etudiant> etudiants;
 
-    public void setIs_active(boolean is_active) {
-        this.is_active = is_active;
-    }
 }

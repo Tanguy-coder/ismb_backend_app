@@ -68,7 +68,7 @@ public class DatabaseSeeder {
                 admin.setUsername("admin");
                 admin.setEmail("admin@example.com");
                 admin.setPassword(encoder.encode("1234"));
-                admin.setIs_active(true);
+                admin.setActive(true);
                 admin.setRoles(Set.of(adminRole));
                 users.save(admin);
             }
@@ -81,7 +81,7 @@ public class DatabaseSeeder {
                 user.setUsername("user");
                 user.setEmail("user@example.com");
                 user.setPassword(encoder.encode("1234"));
-                user.setIs_active(true);
+                user.setActive(true);
                 user.setRoles(Set.of(userRole));
                 users.save(user);
             }

@@ -39,6 +39,12 @@ public class Etudiant extends AbstractModel{
     @JoinColumn(name = "niveau_id", nullable = false)
     private Niveau niveau;
 
+    @OneToMany(mappedBy = "etudiant")
+    private Set<Note> notes;
+
+    @OneToMany(mappedBy = "etudiant")
+    private Set<ParcourtEtudiant> parcours;
+
     @Lob
     private String attentes;
 }

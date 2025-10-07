@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "ues")
 @Getter
@@ -25,4 +27,7 @@ public class Ue extends AbstractModel{
 
     @Column(name = "volume_horaire", nullable = false)
     private Integer volumeHoraire;
+
+    @OneToMany(mappedBy = "ue")
+    private Set<Note> notes;
 }

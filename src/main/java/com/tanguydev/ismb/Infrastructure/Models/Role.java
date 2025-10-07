@@ -15,6 +15,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor @AllArgsConstructor
 public class Role extends AbstractModel {
+    @Enumerated(EnumType.STRING)
     @Column(unique = true)
     private ERole name;
 
@@ -25,4 +26,7 @@ public class Role extends AbstractModel {
             inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
     private Set<Permission> permissions = new HashSet<>();
+
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users = new HashSet<>();
 }

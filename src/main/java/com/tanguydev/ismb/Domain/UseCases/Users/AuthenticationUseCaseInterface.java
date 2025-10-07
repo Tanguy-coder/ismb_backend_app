@@ -1,4 +1,4 @@
-package com.tanguydev.ismb.Domain.UseCases;
+package com.tanguydev.ismb.Domain.UseCases.Users;
 
 import com.tanguydev.ismb.Domain.Entity.DomainUser;
 
