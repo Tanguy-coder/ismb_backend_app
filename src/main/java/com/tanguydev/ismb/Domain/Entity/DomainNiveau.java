@@ -12,7 +12,6 @@ import java.util.Set;
 public class DomainNiveau extends AbstractEntity {
     private String libelle;
     private Set<DomainFiliere> filieres;
-    private Set<DomainEtudiant> etudiants;
     private Set<DomainUe> ues;
     private Set<DomainParcourtEtudiant> parcours;
 }

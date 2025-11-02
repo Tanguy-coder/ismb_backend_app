@@ -22,9 +22,9 @@ public class ParcourtEtudiant extends  AbstractModel{
     private AnneeScolaire anneeScolaire;
 
     @ManyToOne
-    @JoinColumn(name = "niveau_id", nullable = false)
-    private Niveau niveau;
+    @JoinColumn(name = "filiere_id", nullable = false)
+    private Filiere filiere;
 
     @Column(nullable = false)
-    private Integer statut; // nouveau, redoublant, etc.
+    private String statut; // nouveau, redoublant, etc.
 }

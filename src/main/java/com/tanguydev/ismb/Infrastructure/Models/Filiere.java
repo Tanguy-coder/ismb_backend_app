@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "filieres")
 @Getter
@@ -23,4 +25,10 @@ public class Filiere extends  AbstractModel{
 
     @Column(length = 255)
     private String description;
+
+    @OneToMany(mappedBy = "filiere")
+    private Set<Ue> ues;
+
+    @OneToMany(mappedBy = "filiere")
+    private Set<ParcourtEtudiant> parcours;
 }

@@ -2,11 +2,13 @@ package com.tanguydev.ismb;
 
 import com.tanguydev.ismb.Domain.Ports.AnneeScolaireServiceInterface;
 import com.tanguydev.ismb.Domain.Ports.FiliereServiceInterface;
+import com.tanguydev.ismb.Domain.Ports.MatiereServiceInterface;
 import com.tanguydev.ismb.Domain.Ports.NiveauServiceInterface;
 import com.tanguydev.ismb.Domain.UseCases.Filiere.CreateFiliereUseCase;
 import com.tanguydev.ismb.Domain.UseCases.Filiere.GetFiliereByIdUseCase;
 import com.tanguydev.ismb.Domain.UseCases.Filiere.ListFiliereUseCase;
 import com.tanguydev.ismb.Domain.UseCases.Filiere.UpdateFiliereUseCase;
+import com.tanguydev.ismb.Domain.UseCases.Matiere.*;
 import com.tanguydev.ismb.Domain.UseCases.Niveau.CreateNiveauUseCase;
 import com.tanguydev.ismb.Domain.UseCases.Niveau.GetNiveauByIdUseCase;
 import com.tanguydev.ismb.Domain.UseCases.Niveau.ListNiveauUseCase;
@@ -15,25 +17,30 @@ import com.tanguydev.ismb.Domain.UseCases.annee.CreateAnneeScolaireUseCase;
 import com.tanguydev.ismb.Domain.UseCases.annee.GetAnneeByIdUseCase;
 import com.tanguydev.ismb.Domain.UseCases.annee.ListAnneeUseCase;
 import com.tanguydev.ismb.Domain.UseCases.annee.UpdateAnneeUseCase;
-import com.tanguydev.ismb.Infrastructure.Mapper.AnneeScolaireMapper;
-import com.tanguydev.ismb.Infrastructure.Mapper.EtablissementMapper;
-import com.tanguydev.ismb.Infrastructure.Mapper.FiliereMapper;
-import com.tanguydev.ismb.Infrastructure.Mapper.NiveauMapper;
+import com.tanguydev.ismb.Infrastructure.Mapper.*;
 import com.tanguydev.ismb.Infrastructure.Presenter.AnneeScolairePresenter;
 import com.tanguydev.ismb.Infrastructure.Presenter.EtablissementPresenter;
 import com.tanguydev.ismb.Infrastructure.Presenter.FilierePresenter;
 import com.tanguydev.ismb.Domain.Ports.EtablissementServiceInterface;
 import com.tanguydev.ismb.Domain.UseCases.Etablissement.*;
 import com.tanguydev.ismb.Domain.Ports.EtudiantServiceInterface;
+import com.tanguydev.ismb.Domain.Ports.PermissionServiceInterface;
+import com.tanguydev.ismb.Domain.Ports.RoleServiceInterface;
 import com.tanguydev.ismb.Domain.UseCases.Etudiant.*;
-import com.tanguydev.ismb.Infrastructure.Mapper.EtudiantMapper;
+import com.tanguydev.ismb.Domain.UseCases.Permission.*;
+import com.tanguydev.ismb.Domain.UseCases.Role.*;
 import com.tanguydev.ismb.Infrastructure.Presenter.EtudiantPresenter;
+import com.tanguydev.ismb.Infrastructure.Presenter.MatierePresenter;
+import com.tanguydev.ismb.Infrastructure.Presenter.PermissionPresenter;
+import com.tanguydev.ismb.Infrastructure.Presenter.RolePresenter;
 import com.tanguydev.ismb.Infrastructure.Presenter.NiveauPresenter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
+@EnableJpaAuditing
 public class IsmbApplication {
 
 	public static void main(String[] args) {
@@ -65,6 +72,21 @@ public class IsmbApplication {
 	@Bean
 	public EtudiantPresenter etudiantPresenter(EtudiantMapper etudiantMapper){
 		return new EtudiantPresenter(etudiantMapper);
+	}
+
+	@Bean
+	public PermissionPresenter permissionPresenter(PermissionMapper permissionMapper){
+		return new PermissionPresenter(permissionMapper);
+	}
+
+	@Bean
+	public RolePresenter rolePresenter(RoleMapper roleMapper){
+		return new RolePresenter(roleMapper);
+	}
+
+	@Bean
+	public MatierePresenter matierePresenter(MatiereMapper matiereMapper) {
+		return new MatierePresenter(matiereMapper);
 	}
 	/*******************************UseCases*********************************************************/
 	@Bean
@@ -169,4 +191,78 @@ public class IsmbApplication {
 		return new UpdateEtudiantUseCase(etudiantService);
 	}
 
+	@Bean
+	public DeleteEtudiantUseCase deleteEtudiantUseCase(EtudiantServiceInterface etudiantService) {
+		return new DeleteEtudiantUseCase(etudiantService);
+	}
+
+	@Bean
+	public CreatePermissionUseCase createPermissionUseCase(PermissionServiceInterface permissionService) {
+		return new CreatePermissionUseCase(permissionService);
+	}
+
+	@Bean
+	public GetAllPermissionsUseCase getAllPermissionsUseCase(PermissionServiceInterface permissionService) {
+		return new GetAllPermissionsUseCase(permissionService);
+	}
+
+	@Bean
+	public GetPermissionByIdUseCase getPermissionByIdUseCase(PermissionServiceInterface permissionService) {
+		return new GetPermissionByIdUseCase(permissionService);
+	}
+
+	@Bean
+	public UpdatePermissionUseCase updatePermissionUseCase(PermissionServiceInterface permissionService) {
+		return new UpdatePermissionUseCase(permissionService);
+	}
+
+	@Bean
+	public DeletePermissionUseCase deletePermissionUseCase(PermissionServiceInterface permissionService) {
+		return new DeletePermissionUseCase(permissionService);
+	}
+
+	@Bean
+	public GetAllRolesUseCase getAllRolesUseCase(RoleServiceInterface roleService) {
+		return new GetAllRolesUseCase(roleService);
+	}
+
+	@Bean
+	public GetRoleByIdUseCase getRoleByIdUseCase(RoleServiceInterface roleService) {
+		return new GetRoleByIdUseCase(roleService);
+	}
+
+	@Bean
+	public AddPermissionToRoleUseCase addPermissionToRoleUseCase(RoleServiceInterface roleService) {
+		return new AddPermissionToRoleUseCase(roleService);
+	}
+
+	@Bean
+	public RemovePermissionFromRoleUseCase removePermissionFromRoleUseCase(RoleServiceInterface roleService) {
+		return new RemovePermissionFromRoleUseCase(roleService);
+	}
+
+	@Bean
+	public CreateMatiereUseCase createMatiereUseCase(MatiereServiceInterface matiereService) {
+		return new CreateMatiereUseCase(matiereService);
+	}
+
+	@Bean
+	public ListMatiereUseCase listMatiereUseCase(MatiereServiceInterface matiereService) {
+		return new ListMatiereUseCase(matiereService);
+	}
+
+	@Bean
+	public GetMatiereByIdUseCase getMatiereByIdUseCase(MatiereServiceInterface matiereService) {
+		return new GetMatiereByIdUseCase(matiereService);
+	}
+
+	@Bean
+	public UpdateMatiereUseCase updateMatiereUseCase(MatiereServiceInterface matiereService) {
+		return new UpdateMatiereUseCase(matiereService);
+	}
+
+	@Bean
+	public DeleteMatiereUseCase deleteMatiereUseCase(MatiereServiceInterface matiereService) {
+		return new DeleteMatiereUseCase(matiereService);
+	}
 }

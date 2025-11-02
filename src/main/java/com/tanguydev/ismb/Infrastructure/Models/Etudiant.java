@@ -16,33 +16,35 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Etudiant extends AbstractModel{
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;  // lien avec table users
+    private User user;
 
     @Column(nullable = false, length = 1)
-    private String sexe; // M/F
+    private String sexe;
 
     @Column(name = "date_naissance", nullable = false)
     private LocalDate dateNaissance;
 
-    @Column(length = 20)
+    @Column(name = "lieu_de_naissance", nullable = false)
+    private String lieuNaissance;
+
+    @Column(name = "telephone", length = 20)
     private String telephone;
 
     @Column(length = 50)
     private String nationalite;
 
-    @Column(length = 255)
+    @Column(name = "filiere_integration", nullable = false)
+    private String filiereInt;
+
+    @Column(length = 255, nullable = true)
     private String photo;
 
-    @ManyToOne
-    @JoinColumn(name = "niveau_id", nullable = false)
-    private Niveau niveau;
-
-    @OneToMany(mappedBy = "etudiant")
+    @OneToMany(mappedBy = "etudiant", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Note> notes;
 
-    @OneToMany(mappedBy = "etudiant")
+    @OneToMany(mappedBy = "etudiant", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ParcourtEtudiant> parcours;
 
     @Lob

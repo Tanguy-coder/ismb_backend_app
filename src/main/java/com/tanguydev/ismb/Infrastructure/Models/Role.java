@@ -16,7 +16,7 @@ import java.util.Set;
 @NoArgsConstructor @AllArgsConstructor
 public class Role extends AbstractModel {
     @Enumerated(EnumType.STRING)
-    @Column(unique = true)
+    @Column(unique = true, length = 25)
     private ERole name;
 
     @ManyToMany(fetch = FetchType.EAGER)

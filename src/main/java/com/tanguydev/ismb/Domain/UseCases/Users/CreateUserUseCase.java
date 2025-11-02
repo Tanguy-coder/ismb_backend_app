@@ -2,16 +2,19 @@ package com.tanguydev.ismb.Domain.UseCases.Users;
 
 import com.tanguydev.ismb.Domain.Entity.DomainUser;
 import com.tanguydev.ismb.Domain.Ports.UserServiceInterface;
+import org.springframework.stereotype.Service;
 
-public class CreateUserUseCase implements CreateUserUseCaseInterface{
-    private final UserServiceInterface service;
+@Service
+public class CreateUserUseCase implements CreateUserUseCaseInterface {
 
-    public CreateUserUseCase(UserServiceInterface service) {
-        this.service = service;
+    private final UserServiceInterface userService;
+
+    public CreateUserUseCase(UserServiceInterface userService) {
+        this.userService = userService;
     }
 
     @Override
     public DomainUser execute(DomainUser user) {
-        return null;
+        return userService.save(user);
     }
 }

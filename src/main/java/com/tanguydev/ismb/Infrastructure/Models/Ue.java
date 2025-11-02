@@ -22,8 +22,8 @@ public class Ue extends AbstractModel{
     private String semestre;
 
     @ManyToOne
-    @JoinColumn(name = "niveau_id", nullable = false)
-    private Niveau niveau;
+    @JoinColumn(name = "filiere_id", nullable = false)
+    private Filiere filiere;
 
     @Column(name = "volume_horaire", nullable = false)
     private Integer volumeHoraire;

@@ -10,21 +10,22 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {NiveauMapper.class})
 public interface FiliereMapper {
 
-    @Mapping(source = "niveau.id", target = "niveau.id")
     Filiere toJpa(DomainFiliere filiere);
 
-    @Mapping(source = "niveau.id", target = "niveau.id")
+    @Mapping(target = "niveau.filieres", ignore = true)
     DomainFiliere toDomain(Filiere filiere);
 
     List<Filiere> toJpaList(List<DomainFiliere> filieres);
     List<DomainFiliere> toDomainList (List<Filiere> filieres);
 
-    @Mapping(source = "niveau.id", target = "niveauId")
     FiliereResponse toResponse(DomainFiliere filiere);
     List<FiliereResponse> toResponseList(List<DomainFiliere> filieres);
+
+    @Mapping(source = "niveau.id", target = "niveau.id")
+    DomainFiliere toDomain(com.tanguydev.ismb.Infrastructure.Request.FiliereRequest filiereRequest);
 
     // Helper methods for mapping IDs to entities
     default Niveau mapNiveau(Long niveauId) {

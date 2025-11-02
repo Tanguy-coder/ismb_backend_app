@@ -4,8 +4,8 @@ import com.tanguydev.ismb.Infrastructure.Models.ERole;
 import com.tanguydev.ismb.Infrastructure.Models.Permission;
 import com.tanguydev.ismb.Infrastructure.Models.Role;
 import com.tanguydev.ismb.Infrastructure.Models.User;
-import com.tanguydev.ismb.Infrastructure.Repositories.PermissionRepositoryInterface;
-import com.tanguydev.ismb.Infrastructure.Repositories.RoleRepositoryInterface;
+import com.tanguydev.ismb.Infrastructure.Repositories.PermissionJpaRepository;
+import com.tanguydev.ismb.Infrastructure.Repositories.RoleJpaRepository;
 import com.tanguydev.ismb.Infrastructure.Repositories.UserRepositoryJpaInterface;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -14,13 +14,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.HashSet;
 
 @Configuration
 public class DatabaseSeeder {
     @Bean
     CommandLineRunner seed(UserRepositoryJpaInterface users,
-                           RoleRepositoryInterface rolesRepo,
-                           PermissionRepositoryInterface permsRepo,
+                           RoleJpaRepository rolesRepo,
+                           PermissionJpaRepository permsRepo,
                            PasswordEncoder encoder) {
         return args -> {
             // Permissions (idempotent)
@@ -35,31 +36,37 @@ public class DatabaseSeeder {
                 return permsRepo.save(p);
             });
 
-            // Roles (idempotent)
-            Role adminRole = rolesRepo.findByName(ERole.Admin).orElseGet(() -> {
-                Role r = new Role();
-                r.setName(ERole.Admin);
-                r.setPermissions(Set.of(pRead, pAdmin));
-                return rolesRepo.save(r);
-            });
-            // Ensure permissions are updated if role already existed but without full set
-            if (!adminRole.getPermissions().containsAll(Set.of(pRead, pAdmin))) {
-                adminRole.setPermissions(Set.of(pRead, pAdmin));
-                rolesRepo.save(adminRole);
+            // Création de tous les rôles définis dans ERole
+            for (ERole roleEnum : ERole.values()) {
+                Role role = rolesRepo.findByName(roleEnum).orElseGet(() -> {
+                    Role r = new Role();
+                    r.setName(roleEnum);
+                    // Attribution des permissions en fonction du rôle
+                    Set<Permission> permissions = new HashSet<>();
+                    
+                    // Tous les rôles ont au moins la permission USER_READ
+                    permissions.add(pRead);
+                    
+                    // Seul l'Admin a toutes les permissions
+                    if (roleEnum == ERole.Admin) {
+                        permissions.add(pAdmin);
+                    }
+                    
+                    r.setPermissions(permissions);
+                    return rolesRepo.save(r);
+                });
+                
+                // Mise à jour des permissions si le rôle existe déjà
+                if (roleEnum == ERole.Admin && !role.getPermissions().containsAll(Set.of(pRead, pAdmin))) {
+                    role.setPermissions(Set.of(pRead, pAdmin));
+                    rolesRepo.save(role);
+                } else if (!role.getPermissions().contains(pRead)) {
+                    role.getPermissions().add(pRead);
+                    rolesRepo.save(role);
+                }
             }
 
-            Role userRole = rolesRepo.findByName(ERole.User).orElseGet(() -> {
-                Role r = new Role();
-                r.setName(ERole.User);
-                r.setPermissions(Set.of(pRead));
-                return rolesRepo.save(r);
-            });
-            if (!userRole.getPermissions().contains(pRead)) {
-                userRole.getPermissions().add(pRead);
-                rolesRepo.save(userRole);
-            }
-
-            // Users (idempotent)
+            // Création des utilisateurs par défaut
             if (users.findByUsername("admin").isEmpty()) {
                 var admin = new User();
                 admin.setNom("Tanguy");
@@ -69,7 +76,7 @@ public class DatabaseSeeder {
                 admin.setEmail("admin@example.com");
                 admin.setPassword(encoder.encode("1234"));
                 admin.setActive(true);
-                admin.setRoles(Set.of(adminRole));
+                admin.setRoles(Set.of(rolesRepo.findByName(ERole.Admin).get()));
                 users.save(admin);
             }
 
@@ -82,7 +89,7 @@ public class DatabaseSeeder {
                 user.setEmail("user@example.com");
                 user.setPassword(encoder.encode("1234"));
                 user.setActive(true);
-                user.setRoles(Set.of(userRole));
+                user.setRoles(Set.of(rolesRepo.findByName(ERole.User).get()));
                 users.save(user);
             }
         };

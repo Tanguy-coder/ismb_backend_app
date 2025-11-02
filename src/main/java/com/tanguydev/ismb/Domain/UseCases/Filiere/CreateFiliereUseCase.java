@@ -11,7 +11,7 @@ public class CreateFiliereUseCase implements CreateFiliereUseCaseInterface{
     }
 
     @Override
-    public DomainFiliere execute(DomainFiliere filiere) {
-        return this.service.save(filiere);
+    public DomainFiliere execute(DomainFiliere filiere, Long niveauId) {
+        return this.service.save(filiere, niveauId);
     }
 }

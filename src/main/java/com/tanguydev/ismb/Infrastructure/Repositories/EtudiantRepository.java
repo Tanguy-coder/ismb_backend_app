@@ -2,6 +2,7 @@ package com.tanguydev.ismb.Infrastructure.Repositories;
 
 import com.tanguydev.ismb.Domain.Entity.DomainEtudiant;
 import com.tanguydev.ismb.Domain.Gateway.EtudiantRepositoryInterface;
+import com.tanguydev.ismb.Infrastructure.Mapper.Context.CycleAvoidingMappingContext;
 import com.tanguydev.ismb.Infrastructure.Mapper.EtudiantMapper;
 import com.tanguydev.ismb.Infrastructure.Models.Etudiant;
 import org.springframework.stereotype.Repository;
@@ -20,40 +21,47 @@ public class EtudiantRepository implements EtudiantRepositoryInterface {
 
     @Override
     public DomainEtudiant save(DomainEtudiant domainEtudiant) {
-        Etudiant jpa = repository.save(mapper.toJpa(domainEtudiant));
-        return mapper.toDomain(jpa);
+        Etudiant etudiant = mapper.toJpa(domainEtudiant, new CycleAvoidingMappingContext());
+        Etudiant savedEtudiant = repository.save(etudiant);
+        return mapper.toDomain(savedEtudiant, new CycleAvoidingMappingContext());
     }
 
     @Override
     public DomainEtudiant findById(Long id) {
-        return repository.findById(id).map(mapper::toDomain).orElseThrow(() -> new RuntimeException("Etudiant not found"));
+        return repository.findById(id).map(etudiant -> mapper.toDomain(etudiant, new CycleAvoidingMappingContext())).orElseThrow(() -> new RuntimeException("Etudiant not found"));
     }
 
     @Override
     public List<DomainEtudiant> getAll() {
         List<Etudiant> jpaList = repository.findAll();
-        return mapper.toDomainList(jpaList);
+        return mapper.toDomainList(jpaList, new CycleAvoidingMappingContext());
     }
 
     @Override
     public DomainEtudiant update(Long id, DomainEtudiant domainEtudiant) {
         Etudiant existingEtudiant = repository.findById(id).orElseThrow(() -> new RuntimeException("Etudiant not found"));
-        // Update fields from domainEtudiant to existingEtudiant
-        existingEtudiant.setSexe(domainEtudiant.getSexe());
-        existingEtudiant.setDateNaissance(domainEtudiant.getDateNaissance());
-        existingEtudiant.setTelephone(domainEtudiant.getTelephone());
-        existingEtudiant.setNationalite(domainEtudiant.getNationalite());
-        existingEtudiant.setPhoto(domainEtudiant.getPhoto());
-        existingEtudiant.setAttentes(domainEtudiant.getAttentes());
-        // Handle relations (User and Niveau) if they are updated
-        if (domainEtudiant.getUser() != null && domainEtudiant.getUser().getId() != null) {
-            existingEtudiant.setUser(mapper.map(domainEtudiant.getUser().getId()));
-        }
-        if (domainEtudiant.getNiveau() != null && domainEtudiant.getNiveau().getId() != null) {
-            existingEtudiant.setNiveau(mapper.mapNiveau(domainEtudiant.getNiveau().getId()));
-        }
+        // For a full update, you might map the domain object to the existing JPA entity
+        Etudiant updatedEtudiantData = mapper.toJpa(domainEtudiant, new CycleAvoidingMappingContext());
+        
+        // Manually update non-relation fields to avoid issues with managed entities
+        existingEtudiant.setSexe(updatedEtudiantData.getSexe());
+        existingEtudiant.setDateNaissance(updatedEtudiantData.getDateNaissance());
+        existingEtudiant.setLieuNaissance(updatedEtudiantData.getLieuNaissance());
+        existingEtudiant.setTelephone(updatedEtudiantData.getTelephone());
+        existingEtudiant.setNationalite(updatedEtudiantData.getNationalite());
+        existingEtudiant.setFiliereInt(updatedEtudiantData.getFiliereInt());
+        existingEtudiant.setPhoto(updatedEtudiantData.getPhoto());
+        existingEtudiant.setAttentes(updatedEtudiantData.getAttentes());
+
+        // You might need to handle collections carefully, e.g., clearing and adding
+        // Or handle updates within the collections themselves
 
         Etudiant updatedJpa = repository.save(existingEtudiant);
-        return mapper.toDomain(updatedJpa);
+        return mapper.toDomain(updatedJpa, new CycleAvoidingMappingContext());
+    }
+
+    @Override
+    public void delete(Long id) {
+        repository.deleteById(id);
     }
 }

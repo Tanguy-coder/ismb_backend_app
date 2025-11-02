@@ -14,10 +14,11 @@ public class DomainEtudiant extends AbstractEntity {
     private DomainUser user;
     private String sexe;
     private LocalDate dateNaissance;
+    private String lieuNaissance;
     private String telephone;
     private String nationalite;
     private String photo;
-    private DomainNiveau niveau;
+    private String filiereInt;
     private Set<DomainNote> notes;
     private Set<DomainParcourtEtudiant> parcours;
     private String attentes;

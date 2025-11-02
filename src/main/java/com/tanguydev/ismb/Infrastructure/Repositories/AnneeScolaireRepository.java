@@ -7,6 +7,7 @@ import com.tanguydev.ismb.Infrastructure.Models.AnneeScolaire;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class AnneeScolaireRepository implements AnneeScolaireRepositoryInterface {
@@ -42,5 +43,15 @@ public class AnneeScolaireRepository implements AnneeScolaireRepositoryInterface
         existing.setDateDebut(anneeScolaire.getDateDebut());
         existing.setDateFin(anneeScolaire.getDateFin());
         return mapper.toDomain(existing);
+    }
+
+    @Override
+    public Optional<DomainAnneeScolaire> findByAnnee(String annee) {
+        return repository.findByCode(annee).map(mapper::toDomain);
+    }
+
+    @Override
+    public Optional<DomainAnneeScolaire> findLastRegisteredAnneeScolaire() {
+        return repository.findTopByOrderByCodeDesc().map(mapper::toDomain);
     }
 }

@@ -1,5 +1,6 @@
 package com.tanguydev.ismb.Domain.Response;
 
+import com.tanguydev.ismb.Infrastructure.Models.Niveau;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,6 @@ import lombok.NoArgsConstructor;
 public class FiliereResponse {
     private Long id;
     private String libelle;
-    private Long niveauId;
+    private Niveau niveau;
     private String description;
 }

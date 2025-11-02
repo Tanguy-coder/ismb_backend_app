@@ -12,7 +12,7 @@ public class CreateEtudiantUseCase implements CreateEtudiantUseCaseInterface {
     }
 
     @Override
-    public DomainEtudiant execute(DomainEtudiant domainEtudiant, MultipartFile photoFile) {
-        return this.service.save(domainEtudiant, photoFile);
+    public DomainEtudiant execute(DomainEtudiant domainEtudiant, MultipartFile photoFile, Long filiereId, String statut) {
+        return this.service.save(domainEtudiant, photoFile, filiereId, statut);
     }
 }

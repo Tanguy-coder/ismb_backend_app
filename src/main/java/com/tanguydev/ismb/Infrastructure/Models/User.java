@@ -29,7 +29,7 @@ public class User extends AbstractModel{
     @Column(unique = true, nullable = false)
     private String username;
     @Column(nullable = false, name = "is_active")
-    private boolean active;
+    private boolean active = true;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",

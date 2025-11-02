@@ -13,8 +13,9 @@ public class DomainUser extends AbstractEntity{
     private String nom;
     private String prenom;
     private String username;
+    private String email;
     private String contact;
     private String password;
-    private Set<DomainRole> roles;
-    private boolean isActive;
+    private Set<DomainRole> roles = new java.util.HashSet<>();
+    private boolean isActive = true;
 }

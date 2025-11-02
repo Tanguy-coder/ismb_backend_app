@@ -11,12 +11,16 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class EtudiantResponse {
     private Long id;
-    private Long userId;
+    private String nom;
+    private String prenom;
+    private String username;
+    private String email;
+    private String contact;
     private String sexe;
     private LocalDate dateNaissance;
-    private String telephone;
+    private String lieuNaissance;
     private String nationalite;
     private String photo;
-    private Long niveauId;
+    private Long filiere;
     private String attentes;
 }

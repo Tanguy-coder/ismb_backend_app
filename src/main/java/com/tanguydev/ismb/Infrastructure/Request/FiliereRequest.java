@@ -1,14 +1,11 @@
 package com.tanguydev.ismb.Infrastructure.Request;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class FiliereRequest {
+    private Long id;
     private String libelle;
-    private Long niveauId;
     private String description;
+    private NiveauRequest niveau;
 }
