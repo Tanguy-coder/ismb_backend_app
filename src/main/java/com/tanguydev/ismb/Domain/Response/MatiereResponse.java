@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,5 +14,5 @@ public class MatiereResponse {
     private String libelle;
     private String sigle;
     private String type;
-    private NiveauResponse niveau;
+    private Set<NiveauResponse> niveaux;
 }

@@ -1,26 +1,26 @@
-package com.tanguydev.ismb.Domain.Response;
+package com.tanguydev.ismb.Infrastructure.Request;
 
-import lombok.AllArgsConstructor;
+import com.tanguydev.ismb.Domain.Entity.DomainRole;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class EtudiantResponse {
-    private Long id;
+public class EnseignantRequest {
+    // User fields
     private String nom;
     private String prenom;
     private String username;
     private String email;
+    private String password;
+    private Set<DomainRole> roles;
     private String contact;
+
     private String sexe;
     private LocalDate dateNaissance;
     private String lieuNaissance;
+    private String telephone;
     private String nationalite;
-    private String photo;
-    private FiliereResponse filiere;
-    private String attentes;
+    private String matiere;
 }

@@ -9,6 +9,8 @@ import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.Set;
+
 @Mapper(componentModel = "spring", uses = {NiveauMapper.class})
 public interface MatiereMapper {
 
@@ -16,8 +18,11 @@ public interface MatiereMapper {
 
     DomainMatiere toDomain(Matiere matiere, @Context CycleAvoidingMappingContext context);
 
-    @Mapping(source = "niveau.id", target = "niveau.id")
+    @Mapping(target = "niveaux", ignore = true) // Niveaux will be handled by the service layer
     DomainMatiere toDomain(MatiereRequest matiereRequest);
 
+    @Mapping(source = "niveaux", target = "niveaux")
     MatiereResponse toResponse(DomainMatiere domainMatiere);
+
+    Set<MatiereResponse> toResponseSet(Set<DomainMatiere> domainMatieres);
 }

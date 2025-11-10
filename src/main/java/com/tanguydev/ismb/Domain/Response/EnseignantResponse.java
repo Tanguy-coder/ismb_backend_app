@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EtudiantResponse {
+public class EnseignantResponse {
     private Long id;
     private String nom;
     private String prenom;
@@ -21,6 +21,5 @@ public class EtudiantResponse {
     private String lieuNaissance;
     private String nationalite;
     private String photo;
-    private FiliereResponse filiere;
-    private String attentes;
+    private String matiere;
 }

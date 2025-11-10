@@ -29,7 +29,7 @@ public interface EtudiantMapper {
     @Mapping(source = "password", target = "user.password")
     @Mapping(source = "roles", target = "user.roles")
     @Mapping(source = "contact", target = "user.contact") // Added mapping for contact
-    @Mapping(source = "filiere.libelle", target = "filiereInt")
+    @Mapping(source = "filiere.id", target = "filiere.id")
     DomainEtudiant toDomain(EtudiantRequest etudiantRequest);
 
     List<Etudiant> toJpaList(List<DomainEtudiant> etudiants, @Context CycleAvoidingMappingContext context);
@@ -41,6 +41,7 @@ public interface EtudiantMapper {
     @Mapping(source = "user.username", target = "username")
     @Mapping(source = "user.email", target = "email")
     @Mapping(source = "user.contact", target = "contact")
+    @Mapping(source = "filiere", target = "filiere")
     EtudiantResponse toResponse(DomainEtudiant etudiant);
 
     @Mapping(source = "nom", target = "user.nom")
@@ -51,5 +52,7 @@ public interface EtudiantMapper {
     @Mapping(source = "roles", target = "user.roles")
     @Mapping(source = "contact", target = "user.contact") // Added mapping for contact
     @Mapping(source = "filiere.libelle", target = "filiereInt")
+    //@Mapping(source = "user.active", target = "isActive")
+
     List<EtudiantResponse> toResponseList(List<DomainEtudiant> etudiants);
 }

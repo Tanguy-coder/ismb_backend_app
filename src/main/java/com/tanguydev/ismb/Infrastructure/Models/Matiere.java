@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "matieres")
 @Getter
@@ -17,7 +19,11 @@ public class Matiere extends AbstractModel {
     private String sigle;
     private String type;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "niveau_id")
-    private Niveau niveau;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "matiere_niveau",
+            joinColumns = @JoinColumn(name = "matiere_id"),
+            inverseJoinColumns = @JoinColumn(name = "niveau_id")
+    )
+    private Set<Niveau> niveaux;
 }

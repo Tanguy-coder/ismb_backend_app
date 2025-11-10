@@ -7,7 +7,10 @@ import com.tanguydev.ismb.Domain.Gateway.NiveauRepositoryInterface;
 import com.tanguydev.ismb.Domain.Ports.MatiereServiceInterface;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class MatiereService implements MatiereServiceInterface {
@@ -21,9 +24,11 @@ public class MatiereService implements MatiereServiceInterface {
     }
 
     @Override
-    public DomainMatiere save(DomainMatiere domainMatiere, Long niveauId) {
-        DomainNiveau niveau = niveauRepository.findById(niveauId);
-        domainMatiere.setNiveau(niveau);
+    public DomainMatiere save(DomainMatiere domainMatiere, Set<Long> niveauIds) {
+        Set<DomainNiveau> niveaux = niveauIds.stream()
+                .map(niveauRepository::findById)
+                .collect(Collectors.toSet());
+        domainMatiere.setNiveaux(niveaux);
         return matiereRepository.save(domainMatiere);
     }
 

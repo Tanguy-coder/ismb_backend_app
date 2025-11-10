@@ -14,4 +14,5 @@ public class DomainNiveau extends AbstractEntity {
     private Set<DomainFiliere> filieres;
     private Set<DomainUe> ues;
     private Set<DomainParcourtEtudiant> parcours;
+    private Set<DomainMatiere> matieres;
 }

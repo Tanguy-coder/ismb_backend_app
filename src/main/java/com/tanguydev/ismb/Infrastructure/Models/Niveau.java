@@ -21,6 +21,6 @@ public class Niveau extends AbstractModel{
     @OneToMany(mappedBy = "niveau")
     private Set<Filiere> filieres;
 
-    @OneToMany(mappedBy = "niveau")
+    @ManyToMany(mappedBy = "niveaux")
     private Set<Matiere> matieres;
 }

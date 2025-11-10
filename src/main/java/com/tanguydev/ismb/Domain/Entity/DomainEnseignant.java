@@ -5,12 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DomainEtudiant extends AbstractEntity {
+public class DomainEnseignant extends AbstractEntity {
     private DomainUser user;
     private String sexe;
     private LocalDate dateNaissance;
@@ -18,8 +17,5 @@ public class DomainEtudiant extends AbstractEntity {
     private String telephone;
     private String nationalite;
     private String photo;
-    private DomainFiliere filiere;
-    private Set<DomainNote> notes;
-    private Set<DomainParcourtEtudiant> parcours;
-    private String attentes;
+    private String matiere;
 }

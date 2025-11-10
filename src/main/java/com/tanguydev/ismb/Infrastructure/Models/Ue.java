@@ -15,11 +15,11 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Ue extends AbstractModel{
-    @Column(length = 100, nullable = false)
+    @Column(length = 255, nullable = false)
     private String libelle;
 
-    @Column(length = 20, nullable = false)
-    private String semestre;
+    @Column(length = 255, nullable = false)
+    private Integer credits;
 
     @ManyToOne
     @JoinColumn(name = "filiere_id", nullable = false)
@@ -30,4 +30,16 @@ public class Ue extends AbstractModel{
 
     @OneToMany(mappedBy = "ue")
     private Set<Note> notes;
+
+    @ManyToOne
+    @JoinColumn(name = "matiere_id", nullable = false)
+    private Matiere matiere;
+
+    @ManyToOne
+    @JoinColumn(name = "enseignant_id", nullable = false)
+    private Enseignant enseignant;
+
+    @ManyToOne
+    @JoinColumn(name = "annee_scolaire_id", nullable = false)
+    private AnneeScolaire anneeScolaire;
 }

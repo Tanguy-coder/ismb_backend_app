@@ -1,19 +1,21 @@
 package com.tanguydev.ismb.Domain.Response;
 
 import com.tanguydev.ismb.Domain.Entity.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Set;
 
+@Getter
+@Setter
 public class UeResponse {
+    private Long id;
     private String libelle;
-    private String semestre;
-    private DomainNiveau niveau;
+    private Integer credits;
+    private FiliereResponse filiere;
     private Integer volumeHoraire;
-    private Set<DomainNote> notes;
-
-    public String getLibelle() { return libelle; }
-    public String getSemestre() { return semestre; }
-    public DomainNiveau getNiveau() { return niveau; }
-    public Integer getVolumeHoraire() { return volumeHoraire; }
-    public Set<DomainNote> getNotes() { return notes; }
+    private Set<NoteResponse> notes;
+    private MatiereResponse matiere;
+    private EnseignantResponse enseignant;
+    private AnneeScolaireResponse anneeScolaire;
 }

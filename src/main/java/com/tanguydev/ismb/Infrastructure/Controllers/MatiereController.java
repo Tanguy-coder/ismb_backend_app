@@ -6,10 +6,14 @@ import com.tanguydev.ismb.Domain.Response.MatiereResponse;
 import com.tanguydev.ismb.Domain.UseCases.Matiere.*;
 import com.tanguydev.ismb.Infrastructure.Mapper.MatiereMapper;
 import com.tanguydev.ismb.Infrastructure.Request.MatiereRequest;
+import com.tanguydev.ismb.Infrastructure.Request.NiveauRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.HashSet;
 
 @RestController
 @RequestMapping("/api/matieres")
@@ -46,7 +50,10 @@ public class MatiereController {
     @PostMapping
     public ResponseEntity<MatiereResponse> store(@RequestBody MatiereRequest matiereRequest) {
         DomainMatiere newMatiere = matiereMapper.toDomain(matiereRequest);
-        DomainMatiere createdMatiere = createMatiereUseCase.execute(newMatiere, matiereRequest.getNiveau().getId());
+        Set<Long> niveauIds = (matiereRequest.getNiveauRequests() != null ? matiereRequest.getNiveauRequests() : new HashSet<>()).stream()
+                .map(niveauRequest -> ((NiveauRequest) niveauRequest).getId())
+                .collect(Collectors.toSet());
+        DomainMatiere createdMatiere = createMatiereUseCase.execute(newMatiere, niveauIds);
         return ResponseEntity.ok(presenter.present(createdMatiere));
     }
 
