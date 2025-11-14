@@ -36,7 +36,7 @@ public class Etudiant extends AbstractModel{
     private String nationalite;
 
     @Column(name = "filiere_integration", nullable = false)
-    private String filiereInt;
+    private Filiere filiere;
 
     @Column(length = 255, nullable = true)
     private String photo;

@@ -1,5 +1,6 @@
 package com.tanguydev.ismb.Infrastructure.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,6 +17,7 @@ public class Permission extends  AbstractModel{
     @Column(unique = true)
     private String name;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "permissions")
     private Set<Role> roles = new HashSet<>();
 }

@@ -51,6 +51,9 @@ public class EtudiantController {
             @RequestPart(value = "photo", required = false) MultipartFile photoFile) {
         //System.out.println("La request que j'ai:" +etudiantRequest);
         DomainEtudiant newEtudiant = etudiantMapper.toDomain(etudiantRequest);
+        //System.out.println("La request que j'ai:" +etudiantRequest);
+        System.out.println("La request que j'ai:" +etudiantRequest.getFiliere().getId());
+        
 
         DomainEtudiant createdEtudiant = createEtudiantUseCase.execute(newEtudiant, photoFile, etudiantRequest.getFiliere().getId(), etudiantRequest.getStatut());
 

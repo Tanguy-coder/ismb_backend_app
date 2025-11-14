@@ -38,7 +38,7 @@ public class DatabaseSeeder {
 
             // Création de tous les rôles définis dans ERole
             for (ERole roleEnum : ERole.values()) {
-                Role role = rolesRepo.findByName(roleEnum).orElseGet(() -> {
+                rolesRepo.findByName(roleEnum).orElseGet(() -> {
                     Role r = new Role();
                     r.setName(roleEnum);
                     // Attribution des permissions en fonction du rôle
@@ -55,15 +55,6 @@ public class DatabaseSeeder {
                     r.setPermissions(permissions);
                     return rolesRepo.save(r);
                 });
-                
-                // Mise à jour des permissions si le rôle existe déjà
-                if (roleEnum == ERole.Admin && !role.getPermissions().containsAll(Set.of(pRead, pAdmin))) {
-                    role.setPermissions(Set.of(pRead, pAdmin));
-                    rolesRepo.save(role);
-                } else if (!role.getPermissions().contains(pRead)) {
-                    role.getPermissions().add(pRead);
-                    rolesRepo.save(role);
-                }
             }
 
             // Création des utilisateurs par défaut

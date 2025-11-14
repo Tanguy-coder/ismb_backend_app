@@ -28,7 +28,7 @@ public class FileStorageService implements FileStorageServiceInterface {
 
     @Override
     public String save(MultipartFile file) {
-        if (file.isEmpty()) {
+        if (file == null || file.isEmpty()) {
             return null;
         }
 

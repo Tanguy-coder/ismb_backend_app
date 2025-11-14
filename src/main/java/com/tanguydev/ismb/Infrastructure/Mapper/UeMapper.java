@@ -9,13 +9,16 @@ import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = {FiliereMapper.class, NoteMapper.class, MatiereMapper.class, EnseignantMapper.class, AnneeScolaireMapper.class})
+@Mapper(componentModel = "spring", uses = {FiliereMapper.class, MatiereMapper.class, EnseignantMapper.class, AnneeScolaireMapper.class})
 public interface UeMapper {
 
+    // Break circular dependency with NoteMapper by ignoring notes here; Note mapping can be handled separately when needed
     @Mapping(source = "credits", target = "credits")
+    @Mapping(target = "notes", ignore = true)
     Ue toJpa(DomainUe domainUe, @Context CycleAvoidingMappingContext context);
 
     @Mapping(source = "credits", target = "credits")
+    @Mapping(target = "notes", ignore = true)
     DomainUe toDomain(Ue ue, @Context CycleAvoidingMappingContext context);
 
     @Mapping(source = "matiere.id", target = "matiere.id")
@@ -27,5 +30,6 @@ public interface UeMapper {
 
     @Mapping(source = "id", target = "id")
     @Mapping(source = "credits", target = "credits")
+    @Mapping(target = "notes", ignore = true)
     UeResponse toResponse(DomainUe domainUe);
 }

@@ -49,7 +49,7 @@ public class EtudiantRepository implements EtudiantRepositoryInterface {
         existingEtudiant.setLieuNaissance(updatedEtudiantData.getLieuNaissance());
         existingEtudiant.setTelephone(updatedEtudiantData.getTelephone());
         existingEtudiant.setNationalite(updatedEtudiantData.getNationalite());
-        existingEtudiant.setFiliereInt(updatedEtudiantData.getFiliereInt());
+        existingEtudiant.setFiliere(updatedEtudiantData.getFiliere());
         existingEtudiant.setPhoto(updatedEtudiantData.getPhoto());
         existingEtudiant.setAttentes(updatedEtudiantData.getAttentes());
 

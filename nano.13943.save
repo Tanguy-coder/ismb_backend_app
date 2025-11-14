@@ -1,0 +1,1 @@
+/env /usr/lib/jvm/java-17-openjdk-amd64/bin/java @/tmp/cp_79bgpz5z3ny1n861t56k0kp1o.argfile com.tanguydev.ismb.IsmbApplication

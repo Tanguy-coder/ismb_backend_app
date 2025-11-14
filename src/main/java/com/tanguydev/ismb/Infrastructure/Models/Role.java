@@ -1,5 +1,6 @@
 package com.tanguydev.ismb.Infrastructure.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,6 +28,7 @@ public class Role extends AbstractModel {
     )
     private Set<Permission> permissions = new HashSet<>();
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "roles")
     private Set<User> users = new HashSet<>();
 }

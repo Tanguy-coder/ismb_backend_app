@@ -30,6 +30,22 @@ public interface EtudiantMapper {
     @Mapping(source = "roles", target = "user.roles")
     @Mapping(source = "contact", target = "user.contact") // Added mapping for contact
     @Mapping(source = "filiere.id", target = "filiere.id")
+    @Mapping(source = "filiere.libelle", target = "filiere.libelle")
+    @Mapping(source = "filiere.description", target = "filiere.description")
+    @Mapping(source = "filiere.niveau.id", target = "filiere.niveau.id")
+    @Mapping(target = "filiere.niveau.filieres", ignore = true)
+    @Mapping(target = "filiere.niveau.matieres", ignore = true)
+    @Mapping(target = "filiere.niveau.parcours", ignore = true)
+    @Mapping(target = "filiere.niveau.ues", ignore = true)
+    @Mapping(target = "filiere.niveau.createdAt", ignore = true)
+    @Mapping(target = "filiere.niveau.updatedAt", ignore = true)
+    @Mapping(target = "filiere.createdAt", ignore = true)
+    @Mapping(target = "filiere.updatedAt", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "notes", ignore = true)
+    @Mapping(target = "parcours", ignore = true)
     DomainEtudiant toDomain(EtudiantRequest etudiantRequest);
 
     List<Etudiant> toJpaList(List<DomainEtudiant> etudiants, @Context CycleAvoidingMappingContext context);
