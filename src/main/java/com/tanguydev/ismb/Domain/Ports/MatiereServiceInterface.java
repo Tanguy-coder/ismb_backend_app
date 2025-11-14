@@ -9,6 +9,6 @@ public interface MatiereServiceInterface {
     DomainMatiere save(DomainMatiere domainMatiere, Set<Long> niveauIds);
     DomainMatiere findById(Long id);
     List<DomainMatiere> getAll();
-    DomainMatiere update(Long id, DomainMatiere domainMatiere);
+    DomainMatiere update(Long id, DomainMatiere domainMatiere, Set<Long> niveauIds);
     void delete(Long id);
 }

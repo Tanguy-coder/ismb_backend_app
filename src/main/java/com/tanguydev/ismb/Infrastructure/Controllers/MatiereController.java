@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.HashSet;
@@ -50,9 +51,22 @@ public class MatiereController {
     @PostMapping
     public ResponseEntity<MatiereResponse> store(@RequestBody MatiereRequest matiereRequest) {
         DomainMatiere newMatiere = matiereMapper.toDomain(matiereRequest);
-        Set<Long> niveauIds = (matiereRequest.getNiveauRequests() != null ? matiereRequest.getNiveauRequests() : new HashSet<>()).stream()
-                .map(niveauRequest -> ((NiveauRequest) niveauRequest).getId())
-                .collect(Collectors.toSet());
+
+        Set<Long> niveauIds = new HashSet<>();
+
+        if (matiereRequest.getNiveauRequests() != null) {
+            niveauIds.addAll(matiereRequest.getNiveauRequests().stream()
+                    .map(NiveauRequest::getId)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toSet()));
+        }
+
+        if (matiereRequest.getNiveauIds() != null) {
+            niveauIds.addAll(matiereRequest.getNiveauIds().stream()
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toSet()));
+        }
+
         DomainMatiere createdMatiere = createMatiereUseCase.execute(newMatiere, niveauIds);
         return ResponseEntity.ok(presenter.present(createdMatiere));
     }
@@ -60,7 +74,23 @@ public class MatiereController {
     @PutMapping("/{id}")
     public ResponseEntity<MatiereResponse> update(@PathVariable Long id, @RequestBody MatiereRequest matiereRequest) {
         DomainMatiere updatedMatiere = matiereMapper.toDomain(matiereRequest);
-        DomainMatiere result = updateMatiereUseCase.execute(id, updatedMatiere);
+
+        Set<Long> niveauIds = new HashSet<>();
+
+        if (matiereRequest.getNiveauRequests() != null) {
+            niveauIds.addAll(matiereRequest.getNiveauRequests().stream()
+                    .map(NiveauRequest::getId)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toSet()));
+        }
+
+        if (matiereRequest.getNiveauIds() != null) {
+            niveauIds.addAll(matiereRequest.getNiveauIds().stream()
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toSet()));
+        }
+
+        DomainMatiere result = updateMatiereUseCase.execute(id, updatedMatiere, niveauIds);
         return ResponseEntity.ok(presenter.present(result));
     }
 

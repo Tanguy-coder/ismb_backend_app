@@ -35,7 +35,8 @@ public class Etudiant extends AbstractModel{
     @Column(length = 50)
     private String nationalite;
 
-    @Column(name = "filiere_integration", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "filiere_id", nullable = false)
     private Filiere filiere;
 
     @Column(length = 255, nullable = true)

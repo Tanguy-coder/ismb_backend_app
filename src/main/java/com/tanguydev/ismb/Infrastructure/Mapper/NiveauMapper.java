@@ -18,6 +18,7 @@ public interface NiveauMapper {
     @Mapping(target = "filieres", ignore = true)
     @Mapping(target = "ues", ignore = true)
     @Mapping(target = "parcours", ignore = true)
+    @Mapping(target = "matieres", ignore = true)
     DomainNiveau toDomain(Niveau niveau);
 
     List<Niveau> toJpaList(List<DomainNiveau> niveaus);
