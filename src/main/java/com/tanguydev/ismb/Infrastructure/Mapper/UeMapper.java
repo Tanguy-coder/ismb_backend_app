@@ -19,6 +19,8 @@ public interface UeMapper {
 
     @Mapping(source = "credits", target = "credits")
     @Mapping(target = "notes", ignore = true)
+    @Mapping(source = "code", target = "code")
+
     DomainUe toDomain(Ue ue, @Context CycleAvoidingMappingContext context);
 
     @Mapping(source = "matiere.id", target = "matiere.id")
@@ -31,5 +33,6 @@ public interface UeMapper {
     @Mapping(source = "id", target = "id")
     @Mapping(source = "credits", target = "credits")
     @Mapping(target = "notes", ignore = true)
+    @Mapping(source = "code", target = "code")
     UeResponse toResponse(DomainUe domainUe);
 }

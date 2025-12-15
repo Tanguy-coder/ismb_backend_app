@@ -8,6 +8,7 @@ import com.tanguydev.ismb.Infrastructure.Models.Ue;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Repository
@@ -24,6 +25,7 @@ public class UeRepository implements UeRepositoryInterface {
     @Override
     public DomainUe save(DomainUe domainUe) {
         Ue ue = mapper.toJpa(domainUe, new CycleAvoidingMappingContext());
+        ue.setCode(generatedCode());
         return mapper.toDomain(repository.save(ue), new CycleAvoidingMappingContext());
     }
 
@@ -43,12 +45,17 @@ public class UeRepository implements UeRepositoryInterface {
     public DomainUe update(Long id, DomainUe domainUe) {
         Ue existingUe = repository.findById(id).orElseThrow(() -> new RuntimeException("Ue not found"));
         Ue ueToUpdate = mapper.toJpa(domainUe, new CycleAvoidingMappingContext());
-        ueToUpdate.setId(existingUe.getId()); // Ensure we update the existing entity
+        ueToUpdate.setCode(existingUe.getCode());
+        ueToUpdate.setId(existingUe.getId());
         return mapper.toDomain(repository.save(ueToUpdate), new CycleAvoidingMappingContext());
     }
 
     @Override
     public void delete(Long id) {
         repository.deleteById(id);
+    }
+
+    private String generatedCode() {
+        return UUID.randomUUID().toString().replace("-", "").toUpperCase();
     }
 }

@@ -1,0 +1,33 @@
+image: maven:3.9-eclipse-temurin-17
+
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+
+cache:
+  paths:
+    - .m2/repository
+
+stages:
+  - test
+  - build
+
+# Étape 1 : Tests Unitaires
+test_job:
+  stage: test
+  script:
+    - mvn clean test
+
+# Étape 2 : Construction de l'image Docker
+docker_build_job:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+  script:
+    - docker build -t ismb-backend .
+  only:
+    - main
+    - master

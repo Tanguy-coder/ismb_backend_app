@@ -9,6 +9,7 @@ import java.util.Set;
 @Data
 public class EtudiantRequest {
     // User fields
+    private Long id;
     private String nom;
     private String prenom;
     private String username;

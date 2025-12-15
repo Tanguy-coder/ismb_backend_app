@@ -4,6 +4,7 @@ import com.tanguydev.ismb.Domain.Ports.AnneeScolaireServiceInterface;
 import com.tanguydev.ismb.Domain.Ports.FiliereServiceInterface;
 import com.tanguydev.ismb.Domain.Ports.MatiereServiceInterface;
 import com.tanguydev.ismb.Domain.Ports.NiveauServiceInterface;
+import com.tanguydev.ismb.Domain.Ports.NoteServiceInterface;
 import com.tanguydev.ismb.Domain.Ports.UeServiceInterface;
 import com.tanguydev.ismb.Domain.UseCases.Filiere.CreateFiliereUseCase;
 import com.tanguydev.ismb.Domain.UseCases.Filiere.GetFiliereByIdUseCase;
@@ -14,6 +15,9 @@ import com.tanguydev.ismb.Domain.UseCases.Niveau.CreateNiveauUseCase;
 import com.tanguydev.ismb.Domain.UseCases.Niveau.GetNiveauByIdUseCase;
 import com.tanguydev.ismb.Domain.UseCases.Niveau.ListNiveauUseCase;
 import com.tanguydev.ismb.Domain.UseCases.Niveau.UpdateNiveauUseCase;
+import com.tanguydev.ismb.Domain.UseCases.Notes.CreateNoteUseCase;
+import com.tanguydev.ismb.Domain.UseCases.Notes.FindNoteByParamsUseCase;
+import com.tanguydev.ismb.Domain.UseCases.Notes.UpdateNoteUseCase;
 import com.tanguydev.ismb.Domain.UseCases.Ue.*;
 import com.tanguydev.ismb.Domain.UseCases.annee.CreateAnneeScolaireUseCase;
 import com.tanguydev.ismb.Domain.UseCases.annee.GetAnneeByIdUseCase;
@@ -39,6 +43,7 @@ import com.tanguydev.ismb.Infrastructure.Presenter.MatierePresenter;
 import com.tanguydev.ismb.Infrastructure.Presenter.PermissionPresenter;
 import com.tanguydev.ismb.Infrastructure.Presenter.RolePresenter;
 import com.tanguydev.ismb.Infrastructure.Presenter.NiveauPresenter;
+import com.tanguydev.ismb.Infrastructure.Presenter.NotePresenter;
 import com.tanguydev.ismb.Infrastructure.Presenter.UePresenter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -103,6 +108,11 @@ public class IsmbApplication {
 	@Bean
 	public UePresenter uePresenter(UeMapper ueMapper) {
 		return new UePresenter(ueMapper);
+	}
+
+	@Bean
+	public NotePresenter notePresenter(NoteMapper noteMapper) {
+		return new NotePresenter(noteMapper);
 	}
 	/*******************************UseCases*********************************************************/
 	@Bean
@@ -330,4 +340,19 @@ public class IsmbApplication {
 	@Bean	public DeleteUeUseCase deleteUeUseCase(UeServiceInterface ueService) {
 		return new DeleteUeUseCase(ueService);
 	}
+
+	@Bean
+	public CreateNoteUseCase createNoteUseCase(NoteServiceInterface noteService) {
+		return new CreateNoteUseCase(noteService);
+	}
+
+    @Bean
+    public FindNoteByParamsUseCase findNoteByParamsUseCase(NoteServiceInterface noteService) {
+        return new FindNoteByParamsUseCase(noteService);
+    }
+
+    @Bean
+    public UpdateNoteUseCase updateNoteUseCase(NoteServiceInterface noteService) {
+        return new UpdateNoteUseCase(noteService);
+    }
 }

@@ -37,5 +37,8 @@ public class Note extends AbstractModel{
     private String session; //Normale ou rattrapage
     @Column(length = 11)
     private Integer periode; //harmattan ou mousson
-
+    @Column(length = 255)
+    private String mention;
+    @Column(length = 11)
+    private Integer moyCoeff;
 }

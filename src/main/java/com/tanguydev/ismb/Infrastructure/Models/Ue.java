@@ -21,6 +21,9 @@ public class Ue extends AbstractModel{
     @Column(length = 255, nullable = false)
     private Integer credits;
 
+    @Column(length = 64, nullable = false)
+    private String code;
+
     @ManyToOne
     @JoinColumn(name = "filiere_id", nullable = false)
     private Filiere filiere;

@@ -12,6 +12,7 @@ public class UeResponse {
     private Long id;
     private String libelle;
     private Integer credits;
+    private String code;
     private FiliereResponse filiere;
     private Integer volumeHoraire;
     private Set<NoteResponse> notes;
