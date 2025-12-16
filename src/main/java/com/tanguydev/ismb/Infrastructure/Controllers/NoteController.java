@@ -11,12 +11,15 @@ import com.tanguydev.ismb.Infrastructure.Request.NoteRequest;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/notes")
 public class NoteController {
+    private static final Logger logger = LoggerFactory.getLogger(NoteController.class);
     private final CreateNoteUseCaseInterface create;
     private final FindNoteByParamsUseCaseInterface find;
     private final UpdateNoteUseCaseInterface update;
@@ -32,7 +35,7 @@ public class NoteController {
     }
     @PostMapping
     public ResponseEntity<List<NoteResponse>> create(@RequestBody  List<NoteRequest> request) {
-        System.out.println("++++++++++++++++++++++++ Ce qui vient"+request);
+        logger.debug("Réception de la création de notes: {} éléments", request != null ? request.size() : 0);
         List<DomainNote> newNotes = mapper.toDomainList(request);
         List<DomainNote> createdNotes = create.execute(newNotes);
         return ResponseEntity.ok(presenter.presentList(createdNotes));
@@ -46,7 +49,7 @@ public class NoteController {
             @RequestParam("session") String session,
             @RequestParam("periode") Integer periode
     ) {
-        System.out.println(anneeId);
+        logger.debug("Recherche de notes anneeId={}, filiereId={}, ueId={}, session={}, periode={}", anneeId, filiereId, ueId, session, periode);
         List<DomainNote> notes = find.findByParams(anneeId, filiereId, ueId, session, periode);
         return ResponseEntity.ok(presenter.presentList(notes));
     }

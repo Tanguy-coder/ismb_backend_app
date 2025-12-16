@@ -88,6 +88,7 @@ public class NoteRepository implements NoteRepositoryInterface {
     }
 
     @Override
+    @Transactional
     public List<DomainNote> update(List<DomainNote> domainNotes) {
        if(domainNotes == null || domainNotes.isEmpty())
        {
