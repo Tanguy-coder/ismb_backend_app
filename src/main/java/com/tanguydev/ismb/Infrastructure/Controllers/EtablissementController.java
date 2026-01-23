@@ -7,6 +7,7 @@ import com.tanguydev.ismb.Domain.UseCases.Etablissement.CreateEtablissementUseCa
 import com.tanguydev.ismb.Domain.UseCases.Etablissement.GetEtablissementByIdUseCaseInterface;
 import com.tanguydev.ismb.Domain.UseCases.Etablissement.ListEtablissementUseCaseInterface;
 import com.tanguydev.ismb.Domain.UseCases.Etablissement.UpdateEtablissementUseCaseInterface;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -63,10 +64,20 @@ public class EtablissementController {
         return ResponseEntity.ok(presenter.present(createdEtablissement));
     }
 
-    // The update method will also need to be adapted for multipart requests.
-    // This is a placeholder for now.
-    @PutMapping("/{id}")
-    public ResponseEntity<EtablissementResponse> update(@PathVariable Long id, @RequestBody DomainEtablissement etablissement) {
-        return ResponseEntity.ok(presenter.present(updateEtablissementUseCase.execute(id, etablissement)));
+    @PutMapping(value = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<EtablissementResponse> update(@PathVariable Long id,
+                                                     @RequestParam("nom") String nom,
+                                                     @RequestParam(value = "contact", required = false) String contact,
+                                                     @RequestParam("email") String email,
+                                                     @RequestParam(value = "numero", required = false) String numero,
+                                                     @RequestParam(value = "logo", required = false) MultipartFile logoFile,
+                                                     @RequestParam(value = "image", required = false) MultipartFile imageFile) {
+        DomainEtablissement etablissement = new DomainEtablissement();
+        etablissement.setNom(nom);
+        etablissement.setContact(contact);
+        etablissement.setEmail(email);
+        etablissement.setNumero(numero);
+
+        return ResponseEntity.ok(presenter.present(updateEtablissementUseCase.execute(id, etablissement, logoFile, imageFile)));
     }
 }
