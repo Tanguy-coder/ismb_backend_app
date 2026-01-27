@@ -50,6 +50,8 @@ public class EtablissementController {
                                                      @RequestParam("contact") String contact,
                                                      @RequestParam("email") String email,
                                                      @RequestParam("numero") String numero,
+                                                     @RequestParam("devise")  String devise,
+                                                     @RequestParam("ministere")   String ministere,
                                                      @RequestParam(value = "logo", required = false) MultipartFile logoFile,
                                                      @RequestParam(value = "image", required = false) MultipartFile imageFile) {
 
@@ -58,6 +60,8 @@ public class EtablissementController {
         newEtablissement.setContact(contact);
         newEtablissement.setEmail(email);
         newEtablissement.setNumero(numero);
+        newEtablissement.setDevise(devise);
+        newEtablissement.setMinistere(ministere);
 
         DomainEtablissement createdEtablissement = createEtablissementUseCase.execute(newEtablissement, logoFile, imageFile);
 
@@ -70,6 +74,8 @@ public class EtablissementController {
                                                      @RequestParam(value = "contact", required = false) String contact,
                                                      @RequestParam("email") String email,
                                                      @RequestParam(value = "numero", required = false) String numero,
+                                                     @RequestParam(value = "devise", required = false)  String devise,
+                                                     @RequestParam(value = "ministere", required = false)   String ministere,
                                                      @RequestParam(value = "logo", required = false) MultipartFile logoFile,
                                                      @RequestParam(value = "image", required = false) MultipartFile imageFile) {
         DomainEtablissement etablissement = new DomainEtablissement();
@@ -77,6 +83,8 @@ public class EtablissementController {
         etablissement.setContact(contact);
         etablissement.setEmail(email);
         etablissement.setNumero(numero);
+        etablissement.setDevise(devise);
+        etablissement.setMinistere(ministere);
 
         return ResponseEntity.ok(presenter.present(updateEtablissementUseCase.execute(id, etablissement, logoFile, imageFile)));
     }
