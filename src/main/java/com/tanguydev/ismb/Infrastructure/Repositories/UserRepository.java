@@ -59,7 +59,7 @@ public class UserRepository implements UserRepositoryInterface {
          
          // Ne mettre à jour le mot de passe que s'il est fourni et non vide
          if (user.getPassword() != null && !user.getPassword().isEmpty()) {
-             jpaUser.setPassword(user.getPassword());
+         jpaUser.setPassword(user.getPassword());
          }
          
          // Charger les rôles existants depuis la base de données pour éviter l'erreur TransientObjectException
