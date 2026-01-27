@@ -3,10 +3,12 @@ package com.tanguydev.ismb.Infrastructure.Repositories;
 import com.tanguydev.ismb.Domain.Entity.DomainUser;
 import com.tanguydev.ismb.Domain.Gateway.UserRepositoryInterface;
 import com.tanguydev.ismb.Infrastructure.Mapper.UserMapper;
+import com.tanguydev.ismb.Infrastructure.Models.ERole;
 import com.tanguydev.ismb.Infrastructure.Models.Role;
 import com.tanguydev.ismb.Infrastructure.Models.User;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -16,10 +18,12 @@ import java.util.stream.Collectors;
 public class UserRepository implements UserRepositoryInterface {
     private final UserRepositoryJpaInterface repository;
     private final UserMapper mapper;
+    private final RoleJpaRepository roleJpaRepository;
 
-    public UserRepository(UserRepositoryJpaInterface repository, UserMapper mapper) {
+    public UserRepository(UserRepositoryJpaInterface repository, UserMapper mapper, RoleJpaRepository roleJpaRepository) {
         this.repository = repository;
         this.mapper = mapper;
+        this.roleJpaRepository = roleJpaRepository;
     }
 
     @Override
@@ -52,8 +56,22 @@ public class UserRepository implements UserRepositoryInterface {
          jpaUser.setPrenom(user.getPrenom());
          jpaUser.setContact(user.getContact());
          jpaUser.setEmail(user.getEmail());
+         
+         // Ne mettre à jour le mot de passe que s'il est fourni et non vide
+         if (user.getPassword() != null && !user.getPassword().isEmpty()) {
          jpaUser.setPassword(user.getPassword());
-         jpaUser.setRoles(mapper.toJpa(user.getRoles()));
+         }
+         
+         // Charger les rôles existants depuis la base de données pour éviter l'erreur TransientObjectException
+         Set<Role> roles = new HashSet<>();
+         if (user.getRoles() != null) {
+             for (var domainRole : user.getRoles()) {
+                 ERole eRole = domainRole.getName();
+                 roleJpaRepository.findByName(eRole)
+                     .ifPresent(roles::add);
+             }
+         }
+         jpaUser.setRoles(roles);
 
         return mapper.toDomain(repository.save(jpaUser));
 

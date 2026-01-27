@@ -24,6 +24,10 @@ public class Etablissement extends AbstractModel{
     @Column(nullable = true)
     private String numero;
     @Column(nullable = true)
+    private String devise;
+    @Column(nullable = true)
+    private String ministere;
+    @Column(nullable = false)
     private String logo;
     @Column(nullable = true)
     private String image;

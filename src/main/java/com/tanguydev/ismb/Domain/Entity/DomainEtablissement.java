@@ -12,6 +12,8 @@ public class DomainEtablissement extends AbstractEntity{
     private String contact;
     private String email;
     private String numero;
+    private String devise;
+    private String ministere;
     private String logo;
     private String image;
 }

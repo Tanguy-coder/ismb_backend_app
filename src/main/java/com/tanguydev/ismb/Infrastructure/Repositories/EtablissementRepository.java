@@ -42,6 +42,11 @@ public class EtablissementRepository implements EtablissementRepositoryInterface
         existing.setEmail(domainEtablissement.getEmail());
         existing.setContact(domainEtablissement.getContact());
         existing.setNumero(domainEtablissement.getNumero());
-        return mapper.toDomain(existing);
+        existing.setDevise(domainEtablissement.getDevise());
+        existing.setMinistere(domainEtablissement.getMinistere());
+        existing.setLogo(domainEtablissement.getLogo());
+        existing.setImage(domainEtablissement.getImage());
+        Etablissement saved = repository.save(existing);
+        return mapper.toDomain(saved);
     }
 }

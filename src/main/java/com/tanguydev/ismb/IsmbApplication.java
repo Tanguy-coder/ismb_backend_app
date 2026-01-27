@@ -1,11 +1,6 @@
 package com.tanguydev.ismb;
 
-import com.tanguydev.ismb.Domain.Ports.AnneeScolaireServiceInterface;
-import com.tanguydev.ismb.Domain.Ports.FiliereServiceInterface;
-import com.tanguydev.ismb.Domain.Ports.MatiereServiceInterface;
-import com.tanguydev.ismb.Domain.Ports.NiveauServiceInterface;
-import com.tanguydev.ismb.Domain.Ports.NoteServiceInterface;
-import com.tanguydev.ismb.Domain.Ports.UeServiceInterface;
+import com.tanguydev.ismb.Domain.Ports.*;
 import com.tanguydev.ismb.Domain.UseCases.Filiere.CreateFiliereUseCase;
 import com.tanguydev.ismb.Domain.UseCases.Filiere.GetFiliereByIdUseCase;
 import com.tanguydev.ismb.Domain.UseCases.Filiere.ListFiliereUseCase;
@@ -18,33 +13,19 @@ import com.tanguydev.ismb.Domain.UseCases.Niveau.UpdateNiveauUseCase;
 import com.tanguydev.ismb.Domain.UseCases.Notes.CreateNoteUseCase;
 import com.tanguydev.ismb.Domain.UseCases.Notes.FindNoteByParamsUseCase;
 import com.tanguydev.ismb.Domain.UseCases.Notes.UpdateNoteUseCase;
+import com.tanguydev.ismb.Domain.UseCases.Parcourt.ListeClasseUseCase;
 import com.tanguydev.ismb.Domain.UseCases.Ue.*;
 import com.tanguydev.ismb.Domain.UseCases.annee.CreateAnneeScolaireUseCase;
 import com.tanguydev.ismb.Domain.UseCases.annee.GetAnneeByIdUseCase;
 import com.tanguydev.ismb.Domain.UseCases.annee.ListAnneeUseCase;
 import com.tanguydev.ismb.Domain.UseCases.annee.UpdateAnneeUseCase;
 import com.tanguydev.ismb.Infrastructure.Mapper.*;
-import com.tanguydev.ismb.Infrastructure.Presenter.AnneeScolairePresenter;
-import com.tanguydev.ismb.Infrastructure.Presenter.EtablissementPresenter;
-import com.tanguydev.ismb.Infrastructure.Presenter.FilierePresenter;
-import com.tanguydev.ismb.Domain.Ports.EtablissementServiceInterface;
+import com.tanguydev.ismb.Infrastructure.Presenter.*;
 import com.tanguydev.ismb.Domain.UseCases.Etablissement.*;
-import com.tanguydev.ismb.Domain.Ports.EtudiantServiceInterface;
-import com.tanguydev.ismb.Domain.Ports.PermissionServiceInterface;
-import com.tanguydev.ismb.Domain.Ports.RoleServiceInterface;
-import com.tanguydev.ismb.Domain.Ports.EnseignantServiceInterface;
 import com.tanguydev.ismb.Domain.UseCases.Enseignant.*;
-import com.tanguydev.ismb.Infrastructure.Presenter.EnseignantPresenter;
 import com.tanguydev.ismb.Domain.UseCases.Etudiant.*;
 import com.tanguydev.ismb.Domain.UseCases.Permission.*;
 import com.tanguydev.ismb.Domain.UseCases.Role.*;
-import com.tanguydev.ismb.Infrastructure.Presenter.EtudiantPresenter;
-import com.tanguydev.ismb.Infrastructure.Presenter.MatierePresenter;
-import com.tanguydev.ismb.Infrastructure.Presenter.PermissionPresenter;
-import com.tanguydev.ismb.Infrastructure.Presenter.RolePresenter;
-import com.tanguydev.ismb.Infrastructure.Presenter.NiveauPresenter;
-import com.tanguydev.ismb.Infrastructure.Presenter.NotePresenter;
-import com.tanguydev.ismb.Infrastructure.Presenter.UePresenter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -59,6 +40,10 @@ public class IsmbApplication {
 	}
 
 	/*******************************Presenters*********************************************************/
+    @Bean
+    public ListClassePresenter listClassePresenter(ParcourtMapper parcourtMapper) {
+        return new ListClassePresenter(parcourtMapper);
+    }
 	@Bean
 	public NiveauPresenter niveauPresenter(NiveauMapper niveauMapper){
 		return new NiveauPresenter(niveauMapper);
@@ -115,6 +100,11 @@ public class IsmbApplication {
 		return new NotePresenter(noteMapper);
 	}
 	/*******************************UseCases*********************************************************/
+
+    @Bean
+    public ListeClasseUseCase listeClasseUseCase(ParcourtServiceInterface parcourtServiceInterface) {
+        return new ListeClasseUseCase(parcourtServiceInterface);
+    }
 	@Bean
 	public CreateFiliereUseCase createFiliereUseCase(FiliereServiceInterface filiereServiceInterface){
 		return new CreateFiliereUseCase(filiereServiceInterface);

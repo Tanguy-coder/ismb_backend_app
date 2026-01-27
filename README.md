@@ -329,6 +329,10 @@ Avant de déployer en production :
 5. ✅ Désactiver `spring.jpa.show-sql`
 6. ✅ Utiliser des variables d'environnement pour les secrets
 
+## API
+Swagger UI (Interactive HTML): http://localhost:8080/swagger-ui.html
+OpenAPI Specification (JSON format): http://localhost:8080/v3/api-docs
+OpenAPI Specification (YAML format): http://localhost:8080/v3/api-docs.yaml
 ## 📄 Licence
 
 Projet développé pour l'ISMB.

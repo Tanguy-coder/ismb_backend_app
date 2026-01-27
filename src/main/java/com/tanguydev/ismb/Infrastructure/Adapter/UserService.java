@@ -50,6 +50,10 @@ public class UserService implements UserServiceInterface {
 
     @Override
     public DomainUser update(Long id, DomainUser user) {
+        // Encoder le mot de passe si un nouveau mot de passe est fourni
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         return this.repository.update(id, user);
     }
 

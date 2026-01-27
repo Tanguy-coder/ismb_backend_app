@@ -40,10 +40,9 @@ public class EtudiantRepository implements EtudiantRepositoryInterface {
     @Override
     public DomainEtudiant update(Long id, DomainEtudiant domainEtudiant) {
         Etudiant existingEtudiant = repository.findById(id).orElseThrow(() -> new RuntimeException("Etudiant not found"));
-        // For a full update, you might map the domain object to the existing JPA entity
+
         Etudiant updatedEtudiantData = mapper.toJpa(domainEtudiant, new CycleAvoidingMappingContext());
         
-        // Manually update non-relation fields to avoid issues with managed entities
         existingEtudiant.setSexe(updatedEtudiantData.getSexe());
         existingEtudiant.setDateNaissance(updatedEtudiantData.getDateNaissance());
         existingEtudiant.setLieuNaissance(updatedEtudiantData.getLieuNaissance());
@@ -52,9 +51,6 @@ public class EtudiantRepository implements EtudiantRepositoryInterface {
         existingEtudiant.setFiliere(updatedEtudiantData.getFiliere());
         existingEtudiant.setPhoto(updatedEtudiantData.getPhoto());
         existingEtudiant.setAttentes(updatedEtudiantData.getAttentes());
-
-        // You might need to handle collections carefully, e.g., clearing and adding
-        // Or handle updates within the collections themselves
 
         Etudiant updatedJpa = repository.save(existingEtudiant);
         return mapper.toDomain(updatedJpa, new CycleAvoidingMappingContext());

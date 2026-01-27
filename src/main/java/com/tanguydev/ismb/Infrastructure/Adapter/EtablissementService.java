@@ -41,8 +41,27 @@ public class EtablissementService implements EtablissementServiceInterface {
     }
 
     @Override
-    public DomainEtablissement update(Long id, DomainEtablissement domainEtablissement) {
-        // TODO: Implement file update logic
+    public DomainEtablissement update(Long id, DomainEtablissement domainEtablissement, MultipartFile logoFile, MultipartFile imageFile) {
+        // Récupérer l'établissement existant pour préserver les fichiers si non fournis
+        DomainEtablissement existing = this.repository.findById(id);
+        
+        // Sauvegarder les nouveaux fichiers seulement s'ils sont fournis
+        if (logoFile != null && !logoFile.isEmpty()) {
+            String logoFileName = fileStorageService.save(logoFile);
+            domainEtablissement.setLogo(logoFileName);
+        } else {
+            // Conserver le logo existant
+            domainEtablissement.setLogo(existing.getLogo());
+        }
+        
+        if (imageFile != null && !imageFile.isEmpty()) {
+            String imageFileName = fileStorageService.save(imageFile);
+            domainEtablissement.setImage(imageFileName);
+        } else {
+            // Conserver l'image existante
+            domainEtablissement.setImage(existing.getImage());
+        }
+        
         return this.repository.update(id, domainEtablissement);
     }
 }
