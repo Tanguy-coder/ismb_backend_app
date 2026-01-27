@@ -9,5 +9,5 @@ public interface EtablissementServiceInterface {
     DomainEtablissement save(DomainEtablissement domainEtablissement, MultipartFile logoFile, MultipartFile imageFile);
     DomainEtablissement findById(Long id);
     List<DomainEtablissement> getAll();
-    DomainEtablissement update(Long id, DomainEtablissement domainEtablissement);
+    DomainEtablissement update(Long id, DomainEtablissement domainEtablissement, MultipartFile logoFile, MultipartFile imageFile);
 }
