@@ -39,4 +39,7 @@ public class Enseignant extends AbstractModel {
 
     @Column(nullable = true)
     private String matiere;
+
+    @Column(nullable = false, length = 1)
+    private boolean etat = true;
 }

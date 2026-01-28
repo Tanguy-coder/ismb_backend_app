@@ -23,7 +23,7 @@ public class EtudiantRepository implements EtudiantRepositoryInterface {
     @Override
     public DomainEtudiant save(DomainEtudiant domainEtudiant) {
         Etudiant etudiant = mapper.toJpa(domainEtudiant, new CycleAvoidingMappingContext());
-        // Générer un matricule au format ETU{année}{idDernier+1} si non fourni
+
         if (etudiant.getMatricule() == null || etudiant.getMatricule().trim().isEmpty()) {
             etudiant.setMatricule(generateMatriculeByYearAndNextId());
         }

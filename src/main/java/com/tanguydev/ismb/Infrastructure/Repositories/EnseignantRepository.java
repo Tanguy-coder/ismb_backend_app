@@ -49,8 +49,8 @@ public class EnseignantRepository implements EnseignantRepositoryInterface {
         existingEnseignant.setTelephone(updatedEnseignantData.getTelephone());
         existingEnseignant.setNationalite(updatedEnseignantData.getNationalite());
         existingEnseignant.setPhoto(updatedEnseignantData.getPhoto());
-        existingEnseignant.setMatiere(updatedEnseignantData.getMatiere()); // Add this line
-
+        existingEnseignant.setMatiere(updatedEnseignantData.getMatiere());
+        existingEnseignant.setEtat(updatedEnseignantData.isEtat());
         Enseignant updatedJpa = repository.save(existingEnseignant);
         return mapper.toDomain(updatedJpa, new CycleAvoidingMappingContext());
     }
