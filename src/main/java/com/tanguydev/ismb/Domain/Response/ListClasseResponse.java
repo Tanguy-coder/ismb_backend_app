@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class ListClasseResponse {
     private String nom;
     private String prenom;
+    private String matricule;
     private String sexe;
     private Integer age;
     private String lieuNaissance;

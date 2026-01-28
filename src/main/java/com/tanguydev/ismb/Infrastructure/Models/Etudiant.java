@@ -23,6 +23,9 @@ public class Etudiant extends AbstractModel{
     @Column(nullable = false, length = 1)
     private String sexe;
 
+    @Column(nullable = false, length = 30, unique = true)
+    private String matricule;
+
     @Column(name = "date_naissance", nullable = false)
     private LocalDate dateNaissance;
 

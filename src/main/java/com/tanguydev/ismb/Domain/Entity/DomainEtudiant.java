@@ -13,6 +13,7 @@ import java.util.Set;
 public class DomainEtudiant extends AbstractEntity {
     private DomainUser user;
     private String sexe;
+    private String matricule;
     private LocalDate dateNaissance;
     private String lieuNaissance;
     private String telephone;

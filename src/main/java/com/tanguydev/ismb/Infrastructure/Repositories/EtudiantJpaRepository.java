@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EtudiantJpaRepository extends JpaRepository<Etudiant, Long> {
+    boolean existsByMatricule(String matricule);
+    Etudiant findTopByOrderByIdDesc();
 }

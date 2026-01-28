@@ -23,6 +23,7 @@ public abstract class ParcourtMapper {
 
     @Mapping(source = "user.nom", target = "nom")
     @Mapping(source = "user.prenom", target = "prenom")
+    @Mapping(source = "matricule", target = "matricule")
     @Mapping(source = "sexe", target = "sexe")
     @Mapping(source = "dateNaissance", target = "age", qualifiedByName = "calculateAge")
     @Mapping(source = "lieuNaissance", target = "lieuNaissance")

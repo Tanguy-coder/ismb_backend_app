@@ -19,6 +19,7 @@ public class EtudiantRequest {
     private String contact; // Added contact field
 
     private String sexe;
+    private String matricule;
     private LocalDate dateNaissance;
     private String lieuNaissance;
     private String telephone;
