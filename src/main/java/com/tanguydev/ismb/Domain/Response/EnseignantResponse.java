@@ -22,4 +22,5 @@ public class EnseignantResponse {
     private String nationalite;
     private String photo;
     private String matiere;
+    private boolean etat;
 }

@@ -23,4 +23,5 @@ public class EnseignantRequest {
     private String telephone;
     private String nationalite;
     private String matiere;
+    private boolean etat;
 }

@@ -49,12 +49,8 @@ public class EtudiantController {
     public ResponseEntity<EtudiantResponse> store(
             @RequestPart("etudiant") EtudiantRequest etudiantRequest,
             @RequestPart(value = "photo", required = false) MultipartFile photoFile) {
-        //System.out.println("La request que j'ai:" +etudiantRequest);
         DomainEtudiant newEtudiant = etudiantMapper.toDomain(etudiantRequest);
-        //System.out.println("La request que j'ai:" +etudiantRequest);
         System.out.println("La request que j'ai:" +etudiantRequest.getFiliere().getId());
-        
-
         DomainEtudiant createdEtudiant = createEtudiantUseCase.execute(newEtudiant, photoFile, etudiantRequest.getFiliere().getId(), etudiantRequest.getStatut());
 
         return ResponseEntity.ok(presenter.present(createdEtudiant));

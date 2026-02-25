@@ -8,6 +8,7 @@ import com.tanguydev.ismb.Infrastructure.Models.Etudiant;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.time.LocalDate;
 
 @Repository
 public class EtudiantRepository implements EtudiantRepositoryInterface {
@@ -22,13 +23,22 @@ public class EtudiantRepository implements EtudiantRepositoryInterface {
     @Override
     public DomainEtudiant save(DomainEtudiant domainEtudiant) {
         Etudiant etudiant = mapper.toJpa(domainEtudiant, new CycleAvoidingMappingContext());
+
+        if (etudiant.getMatricule() == null || etudiant.getMatricule().trim().isEmpty()) {
+            etudiant.setMatricule(generateMatriculeByYearAndNextId());
+        }
+
         Etudiant savedEtudiant = repository.save(etudiant);
         return mapper.toDomain(savedEtudiant, new CycleAvoidingMappingContext());
     }
 
     @Override
     public DomainEtudiant findById(Long id) {
-        return repository.findById(id).map(etudiant -> mapper.toDomain(etudiant, new CycleAvoidingMappingContext())).orElseThrow(() -> new RuntimeException("Etudiant not found"));
+        return repository.findById(id).map(
+                etudiant -> mapper.toDomain(etudiant,
+                        new CycleAvoidingMappingContext())).orElseThrow(
+                                () -> new RuntimeException("Etudiant not found")
+        );
     }
 
     @Override
@@ -44,6 +54,12 @@ public class EtudiantRepository implements EtudiantRepositoryInterface {
         Etudiant updatedEtudiantData = mapper.toJpa(domainEtudiant, new CycleAvoidingMappingContext());
         
         existingEtudiant.setSexe(updatedEtudiantData.getSexe());
+        // Mettre à jour le matricule s'il est fourni explicitement, sinon le générer si absent côté base
+        if (updatedEtudiantData.getMatricule() != null && !updatedEtudiantData.getMatricule().trim().isEmpty()) {
+            existingEtudiant.setMatricule(updatedEtudiantData.getMatricule());
+        } else if (existingEtudiant.getMatricule() == null || existingEtudiant.getMatricule().trim().isEmpty()) {
+            existingEtudiant.setMatricule(generateMatriculeByYearAndNextId());
+        }
         existingEtudiant.setDateNaissance(updatedEtudiantData.getDateNaissance());
         existingEtudiant.setLieuNaissance(updatedEtudiantData.getLieuNaissance());
         existingEtudiant.setTelephone(updatedEtudiantData.getTelephone());
@@ -59,5 +75,27 @@ public class EtudiantRepository implements EtudiantRepositoryInterface {
     @Override
     public void delete(Long id) {
         repository.deleteById(id);
+    }
+
+    private String generateMatriculeByYearAndNextId() {
+        int year = LocalDate.now().getYear();
+        Etudiant last = repository.findTopByOrderByIdDesc();
+        long nextId = (last != null && last.getId() != null) ? last.getId() + 1 : 1L;
+
+        String matricule = buildMatricule(year, nextId);
+        int attempts = 0;
+        while (repository.existsByMatricule(matricule)) {
+            nextId++;
+            matricule = buildMatricule(year, nextId);
+            attempts++;
+            if (attempts > 1000) {
+                throw new IllegalStateException("Impossible de générer un matricule unique après 1000 tentatives");
+            }
+        }
+        return matricule;
+    }
+
+    private String buildMatricule(int year, long id) {
+        return "ETU" + year + id;
     }
 }

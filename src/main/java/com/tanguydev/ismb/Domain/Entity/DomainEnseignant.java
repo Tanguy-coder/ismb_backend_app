@@ -18,4 +18,5 @@ public class DomainEnseignant extends AbstractEntity {
     private String nationalite;
     private String photo;
     private String matiere;
+    private boolean etat; //veux dire que si l'enseignant est toujours en fonction dans l'etablissement ou pas
 }

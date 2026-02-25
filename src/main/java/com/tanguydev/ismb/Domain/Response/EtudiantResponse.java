@@ -17,6 +17,7 @@ public class EtudiantResponse {
     private String email;
     private String contact;
     private String sexe;
+    private String matricule;
     private LocalDate dateNaissance;
     private String lieuNaissance;
     private String nationalite;
