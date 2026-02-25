@@ -11,15 +11,12 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {UserMapper.class, RoleMapper.class, PermissionMapper.class, AnneeScolaireMapper.class, FiliereMapper.class, NiveauMapper.class})
+@Mapper(componentModel = "spring", uses = {UserMapper.class, RoleMapper.class,
+        PermissionMapper.class, AnneeScolaireMapper.class, FiliereMapper.class, NiveauMapper.class})
 public interface EtudiantMapper {
-
     Etudiant toJpa(DomainEtudiant etudiant, @Context CycleAvoidingMappingContext context);
-
     DomainEtudiant toDomain(Etudiant etudiant, @Context CycleAvoidingMappingContext context);
-
     ParcourtEtudiant toJpa(DomainParcourtEtudiant domain, @Context CycleAvoidingMappingContext context);
-
     DomainParcourtEtudiant toDomain(ParcourtEtudiant jpa, @Context CycleAvoidingMappingContext context);
 
     @Mapping(source = "nom", target = "user.nom")
