@@ -144,25 +144,25 @@ public class IsmbApplication {
 		return new UpdateNiveauUseCase(niveauServiceInterface);
 	}
 	@Bean
-	public CreateAnneeScolaireUseCase createAnneeScolaireUseCase(AnneeScolaireServiceInterface anneeScolaireServiceInterface)
+	public static CreateAnneeScolaireUseCase createAnneeScolaireUseCase(AnneeScolaireServiceInterface anneeScolaireServiceInterface)
 	{
 		return new CreateAnneeScolaireUseCase(anneeScolaireServiceInterface);
 	}
 
 	@Bean
-	public ListAnneeUseCase listAnneeUseCase(AnneeScolaireServiceInterface anneeScolaireServiceInterface)
+	public static ListAnneeUseCase listAnneeUseCase(AnneeScolaireServiceInterface anneeScolaireServiceInterface)
 	{
 		return new ListAnneeUseCase(anneeScolaireServiceInterface);
 	}
 
 	@Bean
-	public GetAnneeByIdUseCase getAnneeByIdUseCase(AnneeScolaireServiceInterface anneeScolaireServiceInterface)
+	public static GetAnneeByIdUseCase getAnneeByIdUseCase(AnneeScolaireServiceInterface anneeScolaireServiceInterface)
 	{
 		return new GetAnneeByIdUseCase(anneeScolaireServiceInterface);
 	}
 
 	@Bean
-	public UpdateAnneeUseCase updateAnneeUseCase(AnneeScolaireServiceInterface anneeScolaireServiceInterface)
+	public static UpdateAnneeUseCase updateAnneeUseCase(AnneeScolaireServiceInterface anneeScolaireServiceInterface)
 	{
 		return new UpdateAnneeUseCase(anneeScolaireServiceInterface);
 	}
