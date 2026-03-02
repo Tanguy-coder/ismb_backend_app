@@ -27,6 +27,7 @@ public class ParcourtRepository implements ParcourtRepositoryInterface {
         List<Etudiant> etudiants = parcours.stream()
                 .map(ParcourtEtudiant::getEtudiant)
                 .toList();
+        System.out.println("Les etudiants recuperes"+etudiants);
         return mapper.toDomainList(etudiants, new CycleAvoidingMappingContext());
     }
 }
