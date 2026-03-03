@@ -1,6 +1,7 @@
 package com.tanguydev.ismb.Infrastructure.Repositories;
 
 import com.tanguydev.ismb.Domain.Entity.DomainEtudiant;
+import com.tanguydev.ismb.Domain.Exception.DuplicateResourceException;
 import com.tanguydev.ismb.Domain.Gateway.EtudiantRepositoryInterface;
 import com.tanguydev.ismb.Infrastructure.Mapper.Context.CycleAvoidingMappingContext;
 import com.tanguydev.ismb.Infrastructure.Mapper.EtudiantMapper;
@@ -26,6 +27,11 @@ public class EtudiantRepository implements EtudiantRepositoryInterface {
 
         if (etudiant.getMatricule() == null || etudiant.getMatricule().trim().isEmpty()) {
             etudiant.setMatricule(generateMatriculeByYearAndNextId());
+        } else {
+            // Vérifier si le matricule existe déjà
+            if (repository.existsByMatricule(etudiant.getMatricule())) {
+                throw new DuplicateResourceException("Etudiant", "matricule", etudiant.getMatricule());
+            }
         }
 
         Etudiant savedEtudiant = repository.save(etudiant);
@@ -56,6 +62,11 @@ public class EtudiantRepository implements EtudiantRepositoryInterface {
         existingEtudiant.setSexe(updatedEtudiantData.getSexe());
         // Mettre à jour le matricule s'il est fourni explicitement, sinon le générer si absent côté base
         if (updatedEtudiantData.getMatricule() != null && !updatedEtudiantData.getMatricule().trim().isEmpty()) {
+            // Vérifier si le nouveau matricule existe déjà (sur un autre étudiant)
+            if (!updatedEtudiantData.getMatricule().equals(existingEtudiant.getMatricule()) && 
+                repository.existsByMatricule(updatedEtudiantData.getMatricule())) {
+                throw new DuplicateResourceException("Etudiant", "matricule", updatedEtudiantData.getMatricule());
+            }
             existingEtudiant.setMatricule(updatedEtudiantData.getMatricule());
         } else if (existingEtudiant.getMatricule() == null || existingEtudiant.getMatricule().trim().isEmpty()) {
             existingEtudiant.setMatricule(generateMatriculeByYearAndNextId());

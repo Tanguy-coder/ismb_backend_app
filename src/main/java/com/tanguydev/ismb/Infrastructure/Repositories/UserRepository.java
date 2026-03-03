@@ -1,6 +1,7 @@
 package com.tanguydev.ismb.Infrastructure.Repositories;
 
 import com.tanguydev.ismb.Domain.Entity.DomainUser;
+import com.tanguydev.ismb.Domain.Exception.DuplicateResourceException;
 import com.tanguydev.ismb.Domain.Gateway.UserRepositoryInterface;
 import com.tanguydev.ismb.Infrastructure.Mapper.UserMapper;
 import com.tanguydev.ismb.Infrastructure.Models.ERole;
@@ -39,6 +40,17 @@ public class UserRepository implements UserRepositoryInterface {
     @Override
     public DomainUser save(DomainUser user) {
         User jpaUser = mapper.toJpa(user);
+        
+        // Vérifier si le username existe déjà
+        if (repository.findByUsername(jpaUser.getUsername()).isPresent()) {
+            throw new DuplicateResourceException("User", "username", jpaUser.getUsername());
+        }
+        
+        // Vérifier si l'email existe déjà
+        if (repository.findByUsernameOrEmail("", jpaUser.getEmail()).isPresent()) {
+            throw new DuplicateResourceException("User", "email", jpaUser.getEmail());
+        }
+        
         User savedUser = this.repository.save(jpaUser);
         return mapper.toDomain(savedUser);
     }
@@ -51,15 +63,31 @@ public class UserRepository implements UserRepositoryInterface {
 
     @Override
     public DomainUser update(Long id, DomainUser user) {
-         User jpaUser = repository.findById(id).orElseThrow(()->new RuntimeException("User Not Found"));
-         jpaUser.setNom(user.getNom());
-         jpaUser.setPrenom(user.getPrenom());
-         jpaUser.setContact(user.getContact());
-         jpaUser.setEmail(user.getEmail());
+         User existingUser = repository.findById(id).orElseThrow(()->new RuntimeException("User Not Found"));
+         
+         // Vérifier si le nouveau username existe déjà (sur un autre utilisateur)
+         if (user.getUsername() != null && !user.getUsername().equals(existingUser.getUsername())) {
+             if (repository.findByUsername(user.getUsername()).isPresent()) {
+                 throw new DuplicateResourceException("User", "username", user.getUsername());
+             }
+             existingUser.setUsername(user.getUsername());
+         }
+         
+         // Vérifier si le nouvel email existe déjà (sur un autre utilisateur)
+         if (user.getEmail() != null && !user.getEmail().equals(existingUser.getEmail())) {
+             if (repository.findByUsernameOrEmail("", user.getEmail()).isPresent()) {
+                 throw new DuplicateResourceException("User", "email", user.getEmail());
+             }
+             existingUser.setEmail(user.getEmail());
+         }
+         
+         existingUser.setNom(user.getNom());
+         existingUser.setPrenom(user.getPrenom());
+         existingUser.setContact(user.getContact());
          
          // Ne mettre à jour le mot de passe que s'il est fourni et non vide
          if (user.getPassword() != null && !user.getPassword().isEmpty()) {
-         jpaUser.setPassword(user.getPassword());
+         existingUser.setPassword(user.getPassword());
          }
          
          // Charger les rôles existants depuis la base de données pour éviter l'erreur TransientObjectException
@@ -71,9 +99,9 @@ public class UserRepository implements UserRepositoryInterface {
                      .ifPresent(roles::add);
              }
          }
-         jpaUser.setRoles(roles);
+         existingUser.setRoles(roles);
 
-        return mapper.toDomain(repository.save(jpaUser));
+        return mapper.toDomain(repository.save(existingUser));
 
     }
 
