@@ -19,6 +19,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -63,7 +64,7 @@ public class GlobalExceptionHandler {
         ErrorResponse error = new ErrorResponse(
                 Instant.now(),
                 HttpStatus.NOT_FOUND.value(),
-                "Not Found",
+                "Ressource non trouvée",
                 ex.getMessage(),
                 request.getRequestURI()
         );
@@ -82,7 +83,7 @@ public class GlobalExceptionHandler {
         ErrorResponse error = new ErrorResponse(
                 Instant.now(),
                 HttpStatus.BAD_REQUEST.value(),
-                "Bad Request",
+                "Requête invalide",
                 ex.getMessage(),
                 request.getRequestURI()
         );
@@ -98,11 +99,23 @@ public class GlobalExceptionHandler {
             HttpServletRequest request) {
         logger.warn("Duplicate resource: {}", ex.getMessage());
         
+        // Message plus spécifique pour les duplications
+        String userMessage = ex.getMessage();
+        if (ex.getMessage().contains("matricule")) {
+            userMessage = "Ce matricule est déjà utilisé par un autre étudiant";
+        } else if (ex.getMessage().contains("username")) {
+            userMessage = "Ce nom d'utilisateur est déjà utilisé";
+        } else if (ex.getMessage().contains("email")) {
+            userMessage = "Cette adresse email est déjà utilisée";
+        } else if (ex.getMessage().contains("libellé")) {
+            userMessage = "Ce libellé de filière est déjà utilisé";
+        }
+        
         ErrorResponse error = new ErrorResponse(
                 Instant.now(),
                 HttpStatus.CONFLICT.value(),
-                "Conflict",
-                ex.getMessage(),
+                "Conflit de données",
+                userMessage,
                 request.getRequestURI()
         );
 
@@ -120,7 +133,7 @@ public class GlobalExceptionHandler {
         ErrorResponse error = new ErrorResponse(
                 Instant.now(),
                 HttpStatus.UNAUTHORIZED.value(),
-                "Unauthorized",
+                "Accès non autorisé",
                 ex.getMessage(),
                 request.getRequestURI()
         );
@@ -139,7 +152,7 @@ public class GlobalExceptionHandler {
         ErrorResponse error = new ErrorResponse(
                 Instant.now(),
                 HttpStatus.FORBIDDEN.value(),
-                "Forbidden",
+                "Accès refusé",
                 "Vous n'avez pas les permissions nécessaires pour accéder à cette ressource",
                 request.getRequestURI()
         );
@@ -158,7 +171,7 @@ public class GlobalExceptionHandler {
         ErrorResponse error = new ErrorResponse(
                 Instant.now(),
                 HttpStatus.UNAUTHORIZED.value(),
-                "Unauthorized",
+                "Échec de l'authentification",
                 "Nom d'utilisateur ou mot de passe incorrect",
                 request.getRequestURI()
         );
@@ -184,7 +197,7 @@ public class GlobalExceptionHandler {
         ErrorResponse error = new ErrorResponse(
                 Instant.now(),
                 HttpStatus.BAD_REQUEST.value(),
-                "Validation Failed",
+                "Erreur de validation",
                 "Les données fournies ne sont pas valides",
                 request.getRequestURI(),
                 validationErrors
@@ -204,7 +217,7 @@ public class GlobalExceptionHandler {
         ErrorResponse error = new ErrorResponse(
                 Instant.now(),
                 HttpStatus.PAYLOAD_TOO_LARGE.value(),
-                "Payload Too Large",
+                "Fichier trop volumineux",
                 "Le fichier est trop volumineux. Taille maximale autorisée: 10MB",
                 request.getRequestURI()
         );
@@ -214,17 +227,44 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.PAYLOAD_TOO_LARGE);
     }
 
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNoResourceFoundException(
+            NoResourceFoundException ex,
+            HttpServletRequest request) {
+        logger.warn("Resource not found: {}", ex.getMessage());
+
+        ErrorResponse error = new ErrorResponse(
+                Instant.now(),
+                HttpStatus.NOT_FOUND.value(),
+                "Ressource introuvable",
+                "La ressource demandée n'a pas été trouvée",
+                request.getRequestURI()
+        );
+
+        addDebugInfo(error, ex);
+
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGlobalException(
             Exception ex,
             HttpServletRequest request) {
         logger.error("Unexpected error occurred", ex);
         
+        // Message plus informatif pour les erreurs génériques
+        String userMessage = "Une erreur technique est survenue. Nos équipes en ont été informées.";
+        
+        // En développement, on peut être plus précis
+        if (isDevProfileActive()) {
+            userMessage = "Erreur: " + ex.getMessage();
+        }
+        
         ErrorResponse error = new ErrorResponse(
                 Instant.now(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "Internal Server Error",
-                "Une erreur inattendue s'est produite. Veuillez réessayer plus tard.",
+                "Erreur technique",
+                userMessage,
                 request.getRequestURI()
         );
 
